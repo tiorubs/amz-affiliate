@@ -1,14 +1,35 @@
-import Affiliate from "../lib";
+import Affiliate from "../src";
 
-const affiliate = new Affiliate("my-tag-here");
+const affiliate = new Affiliate({ tag: "sample-20", marketplaceId: "526970" });
 
 (async () => {
-  const products = [];
+  const deals = await affiliate.getDeals({
+    code: "5bbe9a70",
+    page: 1,
+  });
 
-  for (let i = 0; i < 3; i++) {
-    const items = await affiliate.getProducts("7842558011", 1);
-    if (!!items.length) products.push(...items);
-  }
+  console.log({ deals });
 
-  console.log(products, products.length);
+  const products = await affiliate.getProducts({
+    code: "7842710011",
+    page: 1,
+  });
+
+  console.log({ products });
+
+  if (!products?.length) return;
+
+  const longUrl = await affiliate.getLink({
+    productId: products[0].id,
+    short: false,
+  });
+
+  console.log({ longUrl });
+
+  const shortUrl = await affiliate.getLink({
+    productId: products[0].id,
+    short: true,
+  });
+
+  console.log({ shortUrl });
 })();

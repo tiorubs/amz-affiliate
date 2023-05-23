@@ -1,0 +1,63 @@
+import { load } from "cheerio";
+
+export interface Product {
+  id: string;
+  title: string;
+  thumbnail: string;
+  thumbnail_alt: string;
+  price: number;
+  original_price?: number;
+  discount?: number;
+}
+
+export function getProductId(url?: string) {
+  if (!url) return null;
+  url = url.split("?")[0];
+  const urlPieces = url.split("/");
+  const productIdIndex = urlPieces.indexOf("dp") + 1;
+  return urlPieces[productIdIndex];
+}
+
+interface ScrapeListSelectors {
+  listItem: string;
+  link: string;
+  image: string;
+  currentValue: string;
+  originalValue: string;
+}
+
+export function scrapeList(html: string, selectors: ScrapeListSelectors) {
+  const $ = load(html);
+
+  const products: Product[] = [];
+
+  $(selectors.listItem).each((_index, productItem) => {
+    const element = $(productItem);
+
+    const link = element.find(selectors.link);
+    const image = element.find(selectors.image);
+    const currentValue = element.find(selectors.currentValue).first();
+    const originalValue = element.find(selectors.originalValue).first();
+
+    const id = getProductId(link.attr("href"));
+    const title = link.text()?.trim();
+    const thumbnail = image.attr("src");
+    const price = Number(currentValue.text()?.replace(/[^\d]+/g, ""));
+    const original_price = Number(originalValue.text()?.replace(/[^\d]+/g, "")) || undefined;
+    const discount = original_price ? Math.round(100 * (1 - price / original_price)) : undefined;
+
+    if (!id || !title || !thumbnail || !price) return;
+
+    products.push({
+      id,
+      title,
+      thumbnail: thumbnail.replace("_AC_UY218_", "_SX339_BO1,204,203,200"),
+      thumbnail_alt: thumbnail,
+      price,
+      original_price,
+      discount,
+    });
+  });
+
+  return products;
+}
