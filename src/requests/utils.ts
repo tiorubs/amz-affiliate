@@ -1,7 +1,7 @@
 // @ts-nocheck
-import axios, { RawAxiosRequestHeaders } from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 
-const defaultHeaders: RawAxiosRequestHeaders = {
+const defaultHeaders: Partial<AxiosRequestHeaders> = {
   authority: "www.amazon.com.br",
   accept:
     "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
