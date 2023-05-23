@@ -1,17 +1,21 @@
-interface Product {
-    id: string;
-    url: string;
-    title: string;
-    thumbnail: string;
-    thumbnail_alt: string;
-    price: number;
+interface AffiliateProps {
+    tag: string;
+    marketplaceId?: string | number;
+}
+interface GetProductsProps {
+    code: string;
+    page: number;
+}
+interface GetLinkProps {
+    productId: string;
+    short?: boolean;
 }
 export default class Affiliate {
     private tag;
-    constructor(tag: string);
-    private getProductId;
-    private scrapePageProducts;
-    getProducts(code: string, page?: number): Promise<Product[]>;
-    getLink(productId: string): string;
+    private marketplaceId?;
+    constructor(props: AffiliateProps);
+    getProducts: ({ code, page }: GetProductsProps) => Promise<import("./scrape/utils").Product[]>;
+    getDeals: ({ code, page }: GetProductsProps) => Promise<import("./scrape/utils").Product[]>;
+    getLink: ({ productId, short }: GetLinkProps) => Promise<any>;
 }
 export {};

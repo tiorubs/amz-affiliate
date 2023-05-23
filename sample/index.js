@@ -12,14 +12,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_1 = __importDefault(require("../lib"));
-const affiliate = new lib_1.default("my-tag-here");
+const src_1 = __importDefault(require("../src"));
+const affiliate = new src_1.default({ tag: "sample-20", marketplaceId: "526970" });
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    const products = [];
-    for (let i = 0; i < 3; i++) {
-        const items = yield affiliate.getProducts("7842558011", 1);
-        if (!!items.length)
-            products.push(...items);
-    }
-    console.log(products, products.length);
+    const deals = yield affiliate.getDeals({
+        code: "5bbe9a70",
+        page: 1,
+    });
+    console.log({ deals });
+    const products = yield affiliate.getProducts({
+        code: "7842710011",
+        page: 1,
+    });
+    console.log({ products });
+    if (!(products === null || products === void 0 ? void 0 : products.length))
+        return;
+    const longUrl = yield affiliate.getLink({
+        productId: products[0].id,
+        short: false,
+    });
+    console.log({ longUrl });
+    const shortUrl = yield affiliate.getLink({
+        productId: products[0].id,
+        short: true,
+    });
+    console.log({ shortUrl });
 }))();
