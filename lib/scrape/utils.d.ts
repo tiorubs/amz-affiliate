@@ -1,19 +1,19 @@
 export interface Product {
     id: string;
     title: string;
-    thumbnail: string;
-    thumbnail_alt: string;
+    image: string;
+    image_alt: string;
     price: number;
     original_price?: number;
     discount?: number;
 }
 export declare function getProductId(url?: string): string | null;
 interface ScrapeListSelectors {
-    listItem: string;
+    list: string;
     link: string;
     image: string;
-    currentValue: string;
-    originalValue: string;
+    price: string;
+    originalPrice: string;
 }
 export declare function scrapeList(html: string, selectors: ScrapeListSelectors): Product[];
 export {};

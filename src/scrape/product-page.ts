@@ -6,11 +6,11 @@ import { scrapeList } from "./utils";
 
 export function productPage(html: string) {
   return scrapeList(html, {
-    listItem: `[data-component-type="s-search-result"]`,
+    list: `[data-component-type="s-search-result"]`,
     link: `h2 > a`,
     image: `[data-component-type="s-product-image"] img`,
-    currentValue: `.a-price:not([data-a-strike="true"]) > [aria-hidden="true"]`,
-    originalValue: `.a-price[data-a-strike="true"] > [aria-hidden="true"]`,
+    price: `.a-price:not([data-a-strike="true"]) > [aria-hidden="true"]`,
+    originalPrice: `.a-price[data-a-strike="true"] > [aria-hidden="true"]`,
   });
 
   // const $ = load(html);

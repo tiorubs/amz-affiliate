@@ -20,21 +20,20 @@ const affiliate = new src_1.default({ tag: "sample-20", marketplaceId: "526970" 
         page: 1,
     });
     console.log({ deals });
-    const products = yield affiliate.getProducts({
-        code: "7842710011",
-        page: 1,
-    });
-    console.log({ products });
-    if (!(products === null || products === void 0 ? void 0 : products.length))
-        return;
-    const longUrl = yield affiliate.getLink({
-        productId: products[0].id,
-        short: false,
-    });
-    console.log({ longUrl });
-    const shortUrl = yield affiliate.getLink({
-        productId: products[0].id,
-        short: true,
-    });
-    console.log({ shortUrl });
+    // const products = await affiliate.getProducts({
+    //   code: "7842710011",
+    //   page: 1,
+    // });
+    // console.log({ products });
+    // if (!products?.length) return;
+    // const longUrl = await affiliate.getLink({
+    //   productId: products[0].id,
+    //   short: false,
+    // });
+    // console.log({ longUrl });
+    // const shortUrl = await affiliate.getLink({
+    //   productId: products[0].id,
+    //   short: true,
+    // });
+    // console.log({ shortUrl });
 }))();

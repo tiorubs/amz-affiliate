@@ -3,8 +3,8 @@ import { load } from "cheerio";
 export interface Product {
   id: string;
   title: string;
-  thumbnail: string;
-  thumbnail_alt: string;
+  image: string;
+  image_alt: string;
   price: number;
   original_price?: number;
   discount?: number;
@@ -19,11 +19,11 @@ export function getProductId(url?: string) {
 }
 
 interface ScrapeListSelectors {
-  listItem: string;
+  list: string;
   link: string;
   image: string;
-  currentValue: string;
-  originalValue: string;
+  price: string;
+  originalPrice: string;
 }
 
 function biggerImage(url: string) {
@@ -39,28 +39,28 @@ export function scrapeList(html: string, selectors: ScrapeListSelectors) {
 
   const products: Product[] = [];
 
-  $(selectors.listItem).each((_index, productItem) => {
+  $(selectors.list).each((_index, productItem) => {
     const element = $(productItem);
 
-    const link = element.find(selectors.link);
-    const image = element.find(selectors.image);
-    const currentValue = element.find(selectors.currentValue).first();
-    const originalValue = element.find(selectors.originalValue).first();
+    const linkElement = element.find(selectors.link);
+    const imageElement = element.find(selectors.image);
+    const priceElement = element.find(selectors.price).first();
+    const originalPriceElement = element.find(selectors.originalPrice).first();
 
-    const id = getProductId(link.attr("href"));
-    const title = link.text()?.trim();
-    const thumbnail = image.attr("src");
-    const price = Number(currentValue.text()?.replace(/[^\d]+/g, ""));
-    const original_price = Number(originalValue.text()?.replace(/[^\d]+/g, "")) || undefined;
+    const id = getProductId(linkElement.attr("href"));
+    const title = linkElement.text()?.trim();
+    const image = imageElement.attr("src");
+    const price = Number(priceElement.text()?.replace(/[^\d]+/g, ""));
+    const original_price = Number(originalPriceElement.text()?.replace(/[^\d]+/g, "")) || undefined;
     const discount = original_price ? Math.round(100 * (1 - price / original_price)) : undefined;
 
-    if (!id || !title || !thumbnail || !price) return;
+    if (!id || !title || !image || !price) return;
 
     products.push({
       id,
       title,
-      thumbnail: biggerImage(thumbnail),
-      thumbnail_alt: thumbnail,
+      image: biggerImage(image),
+      image_alt: image,
       price,
       original_price,
       discount,
