@@ -26,6 +26,14 @@ interface ScrapeListSelectors {
   originalValue: string;
 }
 
+function biggerImage(url: string) {
+  const a = url.split("/");
+  const imageResolutionPieces = a[a.length - 1].split(".");
+  imageResolutionPieces[1] = "_SX800,800";
+  a[a.length - 1] = imageResolutionPieces.join(".");
+  return a.join("/");
+}
+
 export function scrapeList(html: string, selectors: ScrapeListSelectors) {
   const $ = load(html);
 
@@ -51,7 +59,7 @@ export function scrapeList(html: string, selectors: ScrapeListSelectors) {
     products.push({
       id,
       title,
-      thumbnail: thumbnail.replace("_AC_UY218_", "_SX339_BO1,204,203,200"),
+      thumbnail: biggerImage(thumbnail),
       thumbnail_alt: thumbnail,
       price,
       original_price,
